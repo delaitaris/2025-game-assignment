@@ -1,0 +1,36 @@
+[gd_scene load_steps=6 format=4 uid="uid://ce1nc7s1k04hu"]
+
+[ext_resource type="PackedScene" uid="uid://dxvsatf2vb8ye" path="res://prefabs/Player.tscn" id="1_tnff8"]
+[ext_resource type="Texture2D" uid="uid://0b0vnf1whp12" path="res://sprites/white thing.png" id="3_qm4gq"]
+
+[sub_resource type="TileSet" id="TileSet_cyxfp"]
+
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_beaos"]
+texture = ExtResource("3_qm4gq")
+texture_region_size = Vector2i(32, 32)
+0:0/0 = 0
+0:0/0/physics_layer_0/polygon_0/points = PackedVector2Array(-16, -16, 16, -16, 16, 16, -16, 16)
+1:0/0 = 0
+1:0/0/physics_layer_0/polygon_0/points = PackedVector2Array(-16, -16, 16, -16, 16, 16, -16, 16)
+2:0/0 = 0
+3:0/0 = 0
+0:1/0 = 0
+1:1/0 = 0
+2:1/0 = 0
+3:1/0 = 0
+
+[sub_resource type="TileSet" id="TileSet_oe5m3"]
+tile_size = Vector2i(32, 32)
+physics_layer_0/collision_layer = 1
+sources/0 = SubResource("TileSetAtlasSource_beaos")
+
+[node name="Node2D" type="Node2D"]
+
+[node name="CharacterBody2D" parent="." instance=ExtResource("1_tnff8")]
+
+[node name="Background" type="TileMapLayer" parent="."]
+tile_set = SubResource("TileSet_cyxfp")
+
+[node name="Foreground" type="TileMapLayer" parent="."]
+tile_map_data = PackedByteArray("AAD+/wMAAAAAAAAAAAD//wMAAAAAAAAAAAAAAAMAAAAAAAAAAAABAAMAAAAAAAAAAAACAAMAAAAAAAAAAAADAAMAAAAAAAAAAAAEAAMAAAAAAAAAAAAFAAMAAAAAAAAAAAAGAAMAAAAAAAAAAAAHAAMAAAAAAAAAAAAIAAMAAAAAAAAAAAAJAAMAAAAAAAAAAAAKAAMAAAAAAAAAAAALAAMAAAAAAAAAAAAMAAMAAAAAAAAAAAANAAMAAAAAAAAAAAAOAAMAAAAAAAAAAAAPAAMAAAAAAAAAAAAQAAMAAAAAAAAAAAARAAMAAAAAAAAAAAASAAMAAAAAAAAAAAATAAMAAAAAAAAAAAAUAAMAAAAAAAAAAAAVAAMAAAAAAAAAAAAWAAMAAAAAAAAAAAAXAAMAAAAAAAAAAAAYAAMAAAAAAAAAAAAZAAMAAAAAAAAAAAAaAAMAAAAAAAAAAAAbAAMAAAAAAAAAAAAcAAMAAAAAAAAAAAAdAAMAAAAAAAAAAAAeAAMAAAAAAAAAAAAfAAMAAAAAAAAAAAAgAAMAAAAAAAAAAAAhAAMAAAAAAAAAAAAiAAMAAAAAAAAAAAAjAAMAAAAAAAAAAAAkAAMAAAAAAAAAAAA=")
+tile_set = SubResource("TileSet_oe5m3")
