@@ -18,9 +18,8 @@ func _physics_process(delta):
 #movement
 	var direction = Input.get_axis("A", "D")
 	if direction:
-		velocity.x = direction * SPEED
-		if velocity.x > 90.0:
-			velocity.x == 90.0
+		velocity.x == direction * SPEED
+
 
 	velocity.x = move_toward(velocity.x, 0, SPEED)
 
