@@ -8,30 +8,35 @@ const SPEED = 50.0
 const JUMP_VELOCITY = -300.00
 var isOnFloor = false
 var wallgrip = false
+var pencilFallStop = false
 func _physics_process(delta):
 	# Add the gravity, wallgripping and walljumping
-	if not is_on_floor() and is_on_wall() and (Input.is_action_pressed("A") or Input.is_action_pressed("D") and velocity.y < 0.0):
+	if not is_on_floor() and is_on_wall() and (Input.is_action_pressed("A") or Input.is_action_pressed("D") and velocity.y > 0.0):
 		wallgrip = true
 		velocity += get_gravity() * delta / 2
-		if wallgrip and Input.is_action_pressed("A") or Input.is_action_pressed("D"):
+		if velocity.y > 700.0:
+			velocity.y = 700.0
+		if wallgrip and (Input.is_action_pressed("A") or Input.is_action_pressed("D")) and Input.is_action_just_pressed("Space"):
 			if Input.is_action_pressed("A") and !Input.is_action_pressed("D"):
-				velocity.x += 300.0
-				velocity.y += -300.0
+				velocity.x += 400.0
+				velocity.y += -650.0
 			if Input.is_action_pressed("D") and !Input.is_action_pressed("A"):
-				velocity.x -= 300.0
-				velocity.y += -300.0
+				velocity.x -= 400.0
+				velocity.y += -650.0
 	else:
-		velocity += get_gravity() * delta
-	#rolling WIP
-	if velocity.y >= 100.0 and !isOnFloor: 
-		if Input.is_action_pressed("A") and is_on_floor():
-			velocity.x += 50.0
-		if Input.is_action_pressed("D") and is_on_floor():
-			velocity.x -= 50.0
+		if !is_on_floor() and Input.is_action_pressed("S"):
+			velocity += get_gravity() * delta / 2
+			if velocity.y < 25.0:
+				$"penciling fall cancel timer".start()
+				pencilFallStop = true
+			if pencilFallStop: velocity.y = 0.0
+		else:
+			velocity += get_gravity() * delta
+
 	# Handle jump with variable heights depending on speeds
 	if Input.is_action_just_pressed("Space") and is_on_floor():
 		if velocity.x == 0.0:
-			velocity.y = JUMP_VELOCITY / 2
+			velocity.y = JUMP_VELOCITY / 1.2
 		if velocity.x <= -125.0 or velocity.x >= 125.0:
 			velocity.y = JUMP_VELOCITY
 		if velocity.x <= -250.0 or velocity.x >= 250.0:
@@ -68,12 +73,8 @@ func _physics_process(delta):
 		elif is_on_floor():
 			velocity.x = move_toward(velocity.x, 0, 20.0)
 	
-	if is_on_floor() and !isOnFloor:
-		isOnFloor = true
-		# just touched floor
-		
-	elif !is_on_floor() and isOnFloor:
-		isOnFloor = false
-		#just left floor
-	
 	move_and_slide()
+
+
+func _on_penciling_fall_cancel_timer_timeout():
+	pencilFallStop = false
