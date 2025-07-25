@@ -26,5 +26,6 @@ position_smoothing_speed = 7.0
 
 [node name="penciling fall cancel timer" type="Timer" parent="."]
 wait_time = 0.5
+one_shot = true
 
 [connection signal="timeout" from="penciling fall cancel timer" to="." method="_on_penciling_fall_cancel_timer_timeout"]
