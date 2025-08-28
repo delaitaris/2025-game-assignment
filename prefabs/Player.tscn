@@ -1,13 +1,25 @@
-[gd_scene load_steps=4 format=3 uid="uid://dxvsatf2vb8ye"]
+[gd_scene load_steps=8 format=3 uid="uid://dxvsatf2vb8ye"]
 
-[ext_resource type="Script" path="res://prefabs/player.gd" id="1_w2ou4"]
+[ext_resource type="Script" path="res://scripts/player.gd" id="1_w2ou4"]
 [ext_resource type="Texture2D" uid="uid://y2w1ww7r8d18" path="res://icon.svg" id="2_wdatc"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_7yd8j"]
 size = Vector2(99, 129)
 
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_26sro"]
+size = Vector2(119, 129)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_r4m6a"]
+size = Vector2(99, 68)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_d6b4y"]
+size = Vector2(93, 42)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_svp5c"]
+size = Vector2(93, 68)
+
 [node name="CharacterBody2D" type="CharacterBody2D"]
-position = Vector2(-8, 1)
+position = Vector2(-9, -16)
 script = ExtResource("1_w2ou4")
 metadata/_edit_group_ = true
 
@@ -28,4 +40,46 @@ position_smoothing_speed = 7.0
 wait_time = 0.5
 one_shot = true
 
+[node name="front handspring duration" type="Timer" parent="."]
+wait_time = 0.4
+one_shot = true
+
+[node name="walljump radius" type="Area2D" parent="."]
+position = Vector2(7.5, -0.5)
+
+[node name="walljump collision" type="CollisionShape2D" parent="walljump radius"]
+shape = SubResource("RectangleShape2D_26sro")
+
+[node name="slide collision detect" type="Area2D" parent="."]
+unique_name_in_owner = true
+
+[node name="slide collion" type="CollisionShape2D" parent="slide collision detect"]
+position = Vector2(7.5, -30)
+shape = SubResource("RectangleShape2D_r4m6a")
+
+[node name="penciling check bottom" type="Area2D" parent="."]
+position = Vector2(6.5, 85)
+
+[node name="CollisionShape2D2" type="CollisionShape2D" parent="penciling check bottom"]
+position = Vector2(1, 0)
+shape = SubResource("RectangleShape2D_d6b4y")
+
+[node name="penciling check top" type="Area2D" parent="."]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="penciling check top"]
+position = Vector2(7.5, -30)
+shape = SubResource("RectangleShape2D_svp5c")
+
 [connection signal="timeout" from="penciling fall cancel timer" to="." method="_on_penciling_fall_cancel_timer_timeout"]
+[connection signal="timeout" from="front handspring duration" to="." method="_on_front_handspring_duration_timeout"]
+[connection signal="area_entered" from="walljump radius" to="." method="_on_walljump_radius_area_entered"]
+[connection signal="area_exited" from="walljump radius" to="." method="_on_walljump_radius_area_exited"]
+[connection signal="body_entered" from="walljump radius" to="." method="_on_walljump_radius_body_entered"]
+[connection signal="body_exited" from="walljump radius" to="." method="_on_walljump_radius_body_exited"]
+[connection signal="area_entered" from="slide collision detect" to="." method="_on_slide_collision_detect_area_entered"]
+[connection signal="body_entered" from="slide collision detect" to="." method="_on_slide_collision_detect_body_entered"]
+[connection signal="body_exited" from="slide collision detect" to="." method="_on_slide_collision_detect_body_exited"]
+[connection signal="body_entered" from="penciling check bottom" to="." method="_on_penciling_check_bottom_body_entered"]
+[connection signal="body_exited" from="penciling check bottom" to="." method="_on_penciling_check_bottom_body_exited"]
+[connection signal="body_entered" from="penciling check top" to="." method="_on_penciling_check_top_body_entered"]
+[connection signal="body_exited" from="penciling check top" to="." method="_on_penciling_check_top_body_exited"]
