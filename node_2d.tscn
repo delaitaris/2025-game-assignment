@@ -1,6 +1,6 @@
 [gd_scene load_steps=9 format=4 uid="uid://ce1nc7s1k04hu"]
 
-[ext_resource type="Script" path="res://level.gd" id="1_442ee"]
+[ext_resource type="Script" path="res://scripts/level.gd" id="1_442ee"]
 [ext_resource type="PackedScene" uid="uid://dxvsatf2vb8ye" path="res://prefabs/Player.tscn" id="1_l02pa"]
 [ext_resource type="Texture2D" uid="uid://0b0vnf1whp12" path="res://sprites/white thing.png" id="2_sy8co"]
 [ext_resource type="PackedScene" uid="uid://h27vqf2ayicu" path="res://prefabs/portal.tscn" id="3_wqjtu"]
@@ -48,5 +48,3 @@ tile_map_data = PackedByteArray("AAD+/wMAAAAAAAAAAAD//wMAAAAAAAAAAAAAAAMAAAAAAAA
 tile_set = SubResource("TileSet_oe5m3")
 
 [node name="Portal" parent="." instance=ExtResource("3_wqjtu")]
-
-[connection signal="body_entered" from="Portal" to="Portal" method="_on_body_entered"]

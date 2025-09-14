@@ -1,16 +1,89 @@
-[gd_scene load_steps=8 format=3 uid="uid://dxvsatf2vb8ye"]
+[gd_scene load_steps=16 format=3 uid="uid://dxvsatf2vb8ye"]
 
 [ext_resource type="Script" path="res://scripts/player.gd" id="1_w2ou4"]
-[ext_resource type="Texture2D" uid="uid://y2w1ww7r8d18" path="res://icon.svg" id="2_wdatc"]
+[ext_resource type="Texture2D" uid="uid://64fkjxh2rekn" path="res://sprites/tilemap2.png" id="2_fp5tk"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_88emd"]
+atlas = ExtResource("2_fp5tk")
+region = Rect2(0, 16, 8, 8)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_au370"]
+atlas = ExtResource("2_fp5tk")
+region = Rect2(0, 0, 8, 8)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_26gma"]
+atlas = ExtResource("2_fp5tk")
+region = Rect2(8, 0, 8, 8)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_65t6j"]
+atlas = ExtResource("2_fp5tk")
+region = Rect2(0, 8, 8, 8)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_l4tx0"]
+atlas = ExtResource("2_fp5tk")
+region = Rect2(16, 8, 8, 8)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_nec82"]
+atlas = ExtResource("2_fp5tk")
+region = Rect2(16, 0, 8, 8)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_b0dgc"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_88emd")
+}],
+"loop": true,
+"name": &"fall",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_au370")
+}],
+"loop": true,
+"name": &"idle",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_26gma")
+}],
+"loop": true,
+"name": &"jump",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_65t6j")
+}],
+"loop": true,
+"name": &"slide",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_l4tx0")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_nec82")
+}],
+"loop": true,
+"name": &"walking",
+"speed": 5.0
+}]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_7yd8j"]
 size = Vector2(99, 129)
 
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_umkib"]
+size = Vector2(10, 129)
+
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_26sro"]
-size = Vector2(119, 129)
+size = Vector2(11, 129)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_r4m6a"]
-size = Vector2(99, 68)
+size = Vector2(97, 68)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_d6b4y"]
 size = Vector2(93, 42)
@@ -18,15 +91,17 @@ size = Vector2(93, 42)
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_svp5c"]
 size = Vector2(93, 68)
 
-[node name="CharacterBody2D" type="CharacterBody2D"]
+[node name="Player" type="CharacterBody2D"]
 position = Vector2(-9, -16)
 script = ExtResource("1_w2ou4")
 metadata/_edit_group_ = true
 
-[node name="Sprite2D" type="Sprite2D" parent="."]
-position = Vector2(7.5, 0)
-scale = Vector2(0.773437, 1)
-texture = ExtResource("2_wdatc")
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
+texture_filter = 1
+position = Vector2(8, 0.499998)
+scale = Vector2(12.25, 15.875)
+sprite_frames = SubResource("SpriteFrames_b0dgc")
+animation = &"fall"
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 position = Vector2(7.5, -0.5)
@@ -36,6 +111,12 @@ shape = SubResource("RectangleShape2D_7yd8j")
 position_smoothing_enabled = true
 position_smoothing_speed = 7.0
 
+[node name="stun timer" type="Timer" parent="."]
+
+[node name="frontflip duration" type="Timer" parent="."]
+wait_time = 0.6
+one_shot = true
+
 [node name="penciling fall cancel timer" type="Timer" parent="."]
 wait_time = 0.5
 one_shot = true
@@ -44,10 +125,17 @@ one_shot = true
 wait_time = 0.4
 one_shot = true
 
-[node name="walljump radius" type="Area2D" parent="."]
+[node name="right walljump radius" type="Area2D" parent="."]
+
+[node name="walljump collision right" type="CollisionShape2D" parent="right walljump radius"]
+position = Vector2(62, -0.5)
+shape = SubResource("RectangleShape2D_umkib")
+
+[node name="left walljump radius" type="Area2D" parent="."]
 position = Vector2(7.5, -0.5)
 
-[node name="walljump collision" type="CollisionShape2D" parent="walljump radius"]
+[node name="walljump collision left" type="CollisionShape2D" parent="left walljump radius"]
+position = Vector2(-55, 0)
 shape = SubResource("RectangleShape2D_26sro")
 
 [node name="slide collision detect" type="Area2D" parent="."]
@@ -60,22 +148,23 @@ shape = SubResource("RectangleShape2D_r4m6a")
 [node name="penciling check bottom" type="Area2D" parent="."]
 position = Vector2(6.5, 85)
 
-[node name="CollisionShape2D2" type="CollisionShape2D" parent="penciling check bottom"]
+[node name="pencil check col bottom" type="CollisionShape2D" parent="penciling check bottom"]
 position = Vector2(1, 0)
 shape = SubResource("RectangleShape2D_d6b4y")
 
 [node name="penciling check top" type="Area2D" parent="."]
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="penciling check top"]
+[node name="pencil check col top" type="CollisionShape2D" parent="penciling check top"]
 position = Vector2(7.5, -30)
 shape = SubResource("RectangleShape2D_svp5c")
 
+[connection signal="timeout" from="frontflip duration" to="." method="_on_frontflip_duration_timeout"]
 [connection signal="timeout" from="penciling fall cancel timer" to="." method="_on_penciling_fall_cancel_timer_timeout"]
 [connection signal="timeout" from="front handspring duration" to="." method="_on_front_handspring_duration_timeout"]
-[connection signal="area_entered" from="walljump radius" to="." method="_on_walljump_radius_area_entered"]
-[connection signal="area_exited" from="walljump radius" to="." method="_on_walljump_radius_area_exited"]
-[connection signal="body_entered" from="walljump radius" to="." method="_on_walljump_radius_body_entered"]
-[connection signal="body_exited" from="walljump radius" to="." method="_on_walljump_radius_body_exited"]
+[connection signal="body_entered" from="right walljump radius" to="." method="_on_right_walljump_radius_body_entered"]
+[connection signal="body_exited" from="right walljump radius" to="." method="_on_right_walljump_radius_body_exited"]
+[connection signal="body_entered" from="left walljump radius" to="." method="_on_right_walljump_radius_2_body_entered"]
+[connection signal="body_exited" from="left walljump radius" to="." method="_on_walljump_radius_body_exited"]
 [connection signal="area_entered" from="slide collision detect" to="." method="_on_slide_collision_detect_area_entered"]
 [connection signal="body_entered" from="slide collision detect" to="." method="_on_slide_collision_detect_body_entered"]
 [connection signal="body_exited" from="slide collision detect" to="." method="_on_slide_collision_detect_body_exited"]
