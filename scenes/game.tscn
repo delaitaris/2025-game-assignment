@@ -1,4 +1,4 @@
-[gd_scene load_steps=6 format=3 uid="uid://bvgx1ni418ewg"]
+[gd_scene load_steps=7 format=3 uid="uid://bvgx1ni418ewg"]
 
 [ext_resource type="Script" path="res://scripts/game.gd" id="1_smrsl"]
 [ext_resource type="PackedScene" uid="uid://ccsux4omfy5xd" path="res://scenes/level_one___tutorial.tscn" id="2_cdmha"]
@@ -6,6 +6,13 @@
 [ext_resource type="Texture2D" uid="uid://6cqau7qeeq7y" path="res://sprites/score sheet.png" id="4_6vdsv"]
 
 [sub_resource type="LabelSettings" id="LabelSettings_kl5ki"]
+font = ExtResource("3_ew7an")
+font_size = 32
+outline_size = 2
+outline_color = Color(0, 0, 0, 1)
+
+[sub_resource type="LabelSettings" id="LabelSettings_nirx4"]
+line_spacing = 2.0
 font = ExtResource("3_ew7an")
 font_size = 32
 outline_size = 2
@@ -46,6 +53,13 @@ offset_right = 213.0
 offset_bottom = 64.0
 label_settings = SubResource("LabelSettings_kl5ki")
 
+[node name="RichTextLabel" type="RichTextLabel" parent="score"]
+layout_mode = 0
+offset_right = 40.0
+offset_bottom = 40.0
+theme_override_fonts/normal_font = ExtResource("3_ew7an")
+bbcode_enabled = true
+
 [node name="Sprite2D" type="Sprite2D" parent="score"]
 z_index = -1
 texture_filter = 1
@@ -53,8 +67,25 @@ position = Vector2(56, 19.5)
 scale = Vector2(8.0625, 4.84375)
 texture = ExtResource("4_6vdsv")
 
-[node name="RichTextLabel" type="RichTextLabel" parent="score"]
+[node name="text" type="Label" parent="."]
+unique_name_in_owner = true
+visible = false
 layout_mode = 0
-offset_right = 40.0
-offset_bottom = 40.0
+offset_left = 498.0
+offset_top = 23.0
+offset_right = 1138.0
+offset_bottom = 125.0
+text = "I don't think there's any purpose in going back there.
+"
+label_settings = SubResource("LabelSettings_nirx4")
+
+[node name="RichTextLabel" type="RichTextLabel" parent="text"]
+visible = false
+layout_mode = 0
+offset_left = 130.0
+offset_top = 53.0
+offset_right = 430.0
+offset_bottom = 146.0
+theme_override_fonts/normal_font = ExtResource("3_ew7an")
 bbcode_enabled = true
+text = "I don't think there's any purpose in going back there."

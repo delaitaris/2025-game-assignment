@@ -1,37 +1,57 @@
-[gd_scene load_steps=16 format=3 uid="uid://dxvsatf2vb8ye"]
+[gd_scene load_steps=22 format=3 uid="uid://dxvsatf2vb8ye"]
 
 [ext_resource type="Script" path="res://scripts/player.gd" id="1_w2ou4"]
-[ext_resource type="Texture2D" uid="uid://64fkjxh2rekn" path="res://sprites/tilemap2.png" id="2_fp5tk"]
+[ext_resource type="Texture2D" uid="uid://0r2nfll8ytma" path="res://sprites/tilemap1 revamp.png" id="2_jnuwk"]
 
-[sub_resource type="AtlasTexture" id="AtlasTexture_88emd"]
-atlas = ExtResource("2_fp5tk")
+[sub_resource type="AtlasTexture" id="AtlasTexture_upifn"]
+atlas = ExtResource("2_jnuwk")
 region = Rect2(0, 16, 8, 8)
 
-[sub_resource type="AtlasTexture" id="AtlasTexture_au370"]
-atlas = ExtResource("2_fp5tk")
+[sub_resource type="AtlasTexture" id="AtlasTexture_ncgjp"]
+atlas = ExtResource("2_jnuwk")
 region = Rect2(0, 0, 8, 8)
 
-[sub_resource type="AtlasTexture" id="AtlasTexture_26gma"]
-atlas = ExtResource("2_fp5tk")
+[sub_resource type="AtlasTexture" id="AtlasTexture_qkjkm"]
+atlas = ExtResource("2_jnuwk")
 region = Rect2(8, 0, 8, 8)
 
-[sub_resource type="AtlasTexture" id="AtlasTexture_65t6j"]
-atlas = ExtResource("2_fp5tk")
+[sub_resource type="AtlasTexture" id="AtlasTexture_8qchq"]
+atlas = ExtResource("2_jnuwk")
+region = Rect2(8, 24, 8, 8)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_trs56"]
+atlas = ExtResource("2_jnuwk")
 region = Rect2(0, 8, 8, 8)
 
-[sub_resource type="AtlasTexture" id="AtlasTexture_l4tx0"]
-atlas = ExtResource("2_fp5tk")
+[sub_resource type="AtlasTexture" id="AtlasTexture_omhpn"]
+atlas = ExtResource("2_jnuwk")
+region = Rect2(8, 8, 8, 8)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_wywwi"]
+atlas = ExtResource("2_jnuwk")
 region = Rect2(16, 8, 8, 8)
 
-[sub_resource type="AtlasTexture" id="AtlasTexture_nec82"]
-atlas = ExtResource("2_fp5tk")
+[sub_resource type="AtlasTexture" id="AtlasTexture_oa40g"]
+atlas = ExtResource("2_jnuwk")
 region = Rect2(16, 0, 8, 8)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_5u10j"]
+atlas = ExtResource("2_jnuwk")
+region = Rect2(0, 24, 8, 8)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_6d3jl"]
+atlas = ExtResource("2_jnuwk")
+region = Rect2(16, 16, 8, 8)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_n6yhd"]
+atlas = ExtResource("2_jnuwk")
+region = Rect2(8, 16, 8, 8)
 
 [sub_resource type="SpriteFrames" id="SpriteFrames_b0dgc"]
 animations = [{
 "frames": [{
 "duration": 1.0,
-"texture": SubResource("AtlasTexture_88emd")
+"texture": SubResource("AtlasTexture_upifn")
 }],
 "loop": true,
 "name": &"fall",
@@ -39,7 +59,7 @@ animations = [{
 }, {
 "frames": [{
 "duration": 1.0,
-"texture": SubResource("AtlasTexture_au370")
+"texture": SubResource("AtlasTexture_ncgjp")
 }],
 "loop": true,
 "name": &"idle",
@@ -47,7 +67,7 @@ animations = [{
 }, {
 "frames": [{
 "duration": 1.0,
-"texture": SubResource("AtlasTexture_26gma")
+"texture": SubResource("AtlasTexture_qkjkm")
 }],
 "loop": true,
 "name": &"jump",
@@ -55,21 +75,56 @@ animations = [{
 }, {
 "frames": [{
 "duration": 1.0,
-"texture": SubResource("AtlasTexture_65t6j")
+"texture": SubResource("AtlasTexture_8qchq")
 }],
 "loop": true,
-"name": &"slide",
+"name": &"pencil",
 "speed": 5.0
 }, {
 "frames": [{
 "duration": 1.0,
-"texture": SubResource("AtlasTexture_l4tx0")
-}, {
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_nec82")
+"texture": SubResource("AtlasTexture_trs56")
 }],
 "loop": true,
-"name": &"walking",
+"name": &"slide move",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_omhpn")
+}],
+"loop": true,
+"name": &"slide stop",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_wywwi")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_oa40g")
+}],
+"loop": true,
+"name": &"walk",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_5u10j")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_6d3jl")
+}],
+"loop": true,
+"name": &"wall climb",
+"speed": 8.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_n6yhd")
+}],
+"loop": true,
+"name": &"wall slide",
 "speed": 5.0
 }]
 
@@ -91,6 +146,9 @@ size = Vector2(93, 42)
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_svp5c"]
 size = Vector2(93, 68)
 
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_hmmm4"]
+size = Vector2(97, 111)
+
 [node name="Player" type="CharacterBody2D"]
 position = Vector2(-9, -16)
 script = ExtResource("1_w2ou4")
@@ -98,10 +156,10 @@ metadata/_edit_group_ = true
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
 texture_filter = 1
-position = Vector2(8, 0.499998)
-scale = Vector2(12.25, 15.875)
+position = Vector2(7, -7.62939e-06)
+scale = Vector2(12, 16)
 sprite_frames = SubResource("SpriteFrames_b0dgc")
-animation = &"fall"
+animation = &"idle"
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 position = Vector2(7.5, -0.5)
@@ -158,6 +216,14 @@ shape = SubResource("RectangleShape2D_d6b4y")
 position = Vector2(7.5, -30)
 shape = SubResource("RectangleShape2D_svp5c")
 
+[node name="killbox" type="Area2D" parent="."]
+collision_layer = 2
+collision_mask = 2
+
+[node name="killbox^2" type="CollisionShape2D" parent="killbox"]
+position = Vector2(7.5, 8.5)
+shape = SubResource("RectangleShape2D_hmmm4")
+
 [connection signal="timeout" from="frontflip duration" to="." method="_on_frontflip_duration_timeout"]
 [connection signal="timeout" from="penciling fall cancel timer" to="." method="_on_penciling_fall_cancel_timer_timeout"]
 [connection signal="timeout" from="front handspring duration" to="." method="_on_front_handspring_duration_timeout"]
@@ -172,3 +238,4 @@ shape = SubResource("RectangleShape2D_svp5c")
 [connection signal="body_exited" from="penciling check bottom" to="." method="_on_penciling_check_bottom_body_exited"]
 [connection signal="body_entered" from="penciling check top" to="." method="_on_penciling_check_top_body_entered"]
 [connection signal="body_exited" from="penciling check top" to="." method="_on_penciling_check_top_body_exited"]
+[connection signal="body_entered" from="killbox" to="." method="_on_killbox_body_entered"]

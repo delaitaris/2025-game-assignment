@@ -22,6 +22,9 @@ var pencilPointT = false
 var Ptrickcount = 0
 var frontflipCount = 0
 var frontspringCount = 0
+var wallgrip = false
+
+
 @onready var animated_sprite = $AnimatedSprite2D
 
 #point system
@@ -31,54 +34,21 @@ func _process(_delta):
 		game.score.text += trick.text + "\n"
 
 func _physics_process(delta):
-	# Add the gravity, wallgripping and walljumping
+	# Add the gravity & pencilling
 	gravityMultiplier = 1
-	if not is_on_floor() and (walljumpHBcollideR or walljumpHBcollideL):
-		if is_on_wall():
-			gravityMultiplier = 0.5
-			if velocity.y > 700.0:
-				velocity.y = 700.0
-		if Input.is_action_just_pressed("Space"):
-			if Input.is_action_pressed("A") and !Input.is_action_pressed("D"):
-				velocity.x += 400.0
-				velocity.y = -400.0
-			if Input.is_action_pressed("D") and !Input.is_action_pressed("A"):
-				velocity.x -= 400.0
-				velocity.y = -400.0
-			if pencilCount == 2:
-				pencilCount = 1
-				Ptrickcount = 0
-			if frontflipCount == 1:
-				frontflipCount = 0
-		if Input.is_action_just_pressed("Shift"):
-			if Input.is_action_pressed("A") and !Input.is_action_pressed("D"):
-				velocity.x += 600.0
-			if Input.is_action_pressed("D") and !Input.is_action_pressed("A"):
-				velocity.x -= 60.0
-			if pencilCount == 2:
-				pencilCount = 1
-				Ptrickcount = 0
-			if frontflipCount == 1:
-				frontflipCount = 0
-	elif !is_on_floor() and velocity.y < 0:
-		animated_sprite.play("jump")
-	elif !is_on_floor() and velocity.y > 0:
-		animated_sprite.play("fall")
-	elif !is_on_floor() and Input.is_action_just_pressed("S") and pencilCount == 1:
-		if delta:
-			if velocity.y < 75.0:
-				if !pencilFallStop:
-					pencilFallStop = true
-					$"penciling fall cancel timer".start()
-		if pencilFallStop:
-			gravityMultiplier = 0
-			velocity.y = 0.0
-			if pencilPointB and pencilPointT and !is_on_floor() and Ptrickcount == 0: #penciling TRICK and slide TRICK
-				tricks.append(Trick.newPencilTrick())
-				Ptrickcount = 1
-			if pencilPointB and pencilPointT and is_on_floor() and Ptrickcount == 0:
-				tricks.append(Trick.newSlideTrick())
-	velocity += get_gravity() * delta * gravityMultiplier
+	if !is_on_floor() and Input.is_action_just_pressed("S") and pencilCount == 1:
+		if velocity.y < 75.0:
+			if !pencilFallStop:
+				pencilFallStop = true
+				$"penciling fall cancel timer".start()
+	if pencilFallStop:
+		gravityMultiplier = 0
+		velocity.y = 0.0
+		if pencilPointB and pencilPointT and !is_on_floor() and Ptrickcount == 0: #penciling TRICK and slide TRICK
+			tricks.append(Trick.newPencilTrick())
+			Ptrickcount = 1
+		if pencilPointB and pencilPointT and is_on_floor() and Ptrickcount == 0:
+			tricks.append(Trick.newSlideTrick())
 	if is_on_floor():
 		pencilCount = 1
 		Ptrickcount = 0
@@ -99,6 +69,11 @@ func _physics_process(delta):
 	#slide change direction
 	if (Input.is_action_pressed("S") or slideHBcollide) and Input.is_action_just_pressed("Space") and is_on_floor() and slideDirCount == 0:
 		slideDirCount = 1
+		isSliding = true
+		if velocity.x < 0 or velocity.x > 0:
+			animated_sprite.play("slide move")
+		else:
+			animated_sprite.play("slide stop")
 		if Input.is_action_pressed("A") and !Input.is_action_pressed("D") and (velocity.x <= 500.0 or velocity.x >= -550.0):
 			velocity.x += -650.0
 			velocity.y = JUMP_VELOCITY / 3
@@ -111,7 +86,7 @@ func _physics_process(delta):
 				velocity.x = 500.0
 	# Get the input direction and handle the movement/deceleration.
 	var direction = Input.get_axis("A", "D")
-	$"AnimatedSprite2D".scale = Vector2(12.222, 15.889)
+	$"AnimatedSprite2D".scale = Vector2(12, 16)
 	$"AnimatedSprite2D".position = Vector2(7.5, 0)
 	$CollisionShape2D.shape.size = Vector2(99, 129)
 	$CollisionShape2D.position = Vector2(7.5, 0)
@@ -138,19 +113,55 @@ func _physics_process(delta):
 		isSliding = false
 		is_moving = true
 		velocity.x += direction * SPEED / 2
-		if velocity.x > 0 and is_on_floor():
-			animated_sprite.play("walking")
-			animated_sprite.flip_h = false
-		if velocity.x < 0 and is_on_floor():
-			animated_sprite.play("walking")
-			animated_sprite.flip_h = true
+		if !isSliding:
+			animated_sprite.play("walk")
 		if Input.is_action_pressed("A") and velocity.x <= -500.0 and !Input.is_action_pressed("D"):
 			velocity.x = -500.0
 		if Input.is_action_pressed("D") and velocity.x >= 500.0 and !Input.is_action_pressed("A"):
 			velocity.x = 500.0
+		animated_sprite.flip_h = direction == -1
 	elif is_on_floor():
 		animated_sprite.play("idle")
 		velocity.x = move_toward(velocity.x, 0, 20.0)
+	# jump whatever
+	if not is_on_floor() and (walljumpHBcollideR or walljumpHBcollideL): 
+		if is_on_wall() and (Input.is_action_pressed("A") or Input.is_action_pressed("D")):
+			gravityMultiplier = 0.5
+			if velocity.y > 700.0:
+				velocity.y = 700.0
+			if velocity.y < 0 and wallgrip:
+				animated_sprite.play("wall climb")
+			else:
+				animated_sprite.play("wall slide")
+		if Input.is_action_just_pressed("Space"):
+			if Input.is_action_pressed("A") and !Input.is_action_pressed("D"):
+				velocity.x += 400.0
+				velocity.y = -400.0
+				wallgrip = true
+			if Input.is_action_pressed("D") and !Input.is_action_pressed("A"):
+				velocity.x -= 400.0
+				velocity.y = -400.0
+				wallgrip = true
+			if pencilCount == 2:
+				pencilCount = 1
+				Ptrickcount = 0
+			if frontflipCount == 1:
+				frontflipCount = 0
+		if Input.is_action_just_pressed("Shift"):
+			if Input.is_action_pressed("A") and !Input.is_action_pressed("D"):
+				velocity.x += 600.0
+			if Input.is_action_pressed("D") and !Input.is_action_pressed("A"):
+				velocity.x -= 60.0
+			if pencilCount == 2:
+				pencilCount = 1
+				Ptrickcount = 0
+			if frontflipCount == 1:
+				frontflipCount = 0
+	elif !is_on_floor() and velocity.y < 0:
+		animated_sprite.play("jump")
+	elif !is_on_floor() and velocity.y > 0:
+		animated_sprite.play("fall")
+	velocity += get_gravity() * delta * gravityMultiplier
 	move_and_slide()
 	#respawn
 	match level.levelName:
@@ -180,7 +191,9 @@ func _physics_process(delta):
 		frontflipCount = 0
 		if velocity.x == 0:
 			if len(tricks) > 0: evaluateTricks()
- 
+
+
+
 func evaluateTricks():
 	var multipliers = 1
 	var additives = 0
@@ -268,3 +281,7 @@ func _on_frontflip_duration_timeout():
 	tricks.append(Trick.newFrontflipTrick())
 	print("success FF")
 	frontflipCount = 1
+
+
+func _on_killbox_body_entered(body):
+	if body is Danger: position = start_position
